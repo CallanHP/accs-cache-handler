@@ -63,7 +63,7 @@ put inserts an entry into the cache. This will overwrite any existing entry with
 
 **val:** the object to be inserted. This object can be a primitive or a more complex javascript object. This is restricted to objects that can be serialised via JSON.stringify(), so complex objects and arrays are fine, though functions, or objects containing functions will not work. It is possible to store those functions as a string, then eval them, which is about as recommended as using eval() ever is.
 
-**ttl:** (optional) time-to-live for the cache entry, in ms.
+**ttl:** (optional) time-to-live for the cache entry, in ms. An absent or negative value inserts the value with no ttl (indefinite).
 
 **isBlob:** (optional) boolean that describes whether to skip parsing the input, and instead treat it as raw data
 

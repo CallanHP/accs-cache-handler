@@ -82,7 +82,7 @@ Cache.prototype.put = function(key, val, ttl, isBlob, callback) {
 	if(typeof key != 'string'){
 		throw new TypeError("Caching keys must be strings or numbers!");
 	}
-	if(ttl && (typeof ttl != 'number' || ttl <= 0)){
+	if(ttl && typeof ttl != 'number'){
 		throw new TypeError("Time to live for cache entries must a positive number!");
 	}
 	//Assemble the call to add the entry to the cache
@@ -92,7 +92,7 @@ Cache.prototype.put = function(key, val, ttl, isBlob, callback) {
         						'Content-Type': 'application/octet-stream'
         					}
         				};
-	if(ttl){
+	if(ttl && ttl > 0){
 		options.qs = {'ttl':ttl};
 	}
 	//Serialize the body if appropriate
@@ -133,7 +133,7 @@ Cache.prototype.putIfAbsent = function(key, val, ttl, callback) {
 	if(typeof key != 'string'){
 		throw new TypeError("Caching keys must be strings or numbers!");
 	}
-	if(ttl && (typeof ttl != 'number' || ttl <= 0)){
+	if(ttl && typeof ttl != 'number'){
 		throw new TypeError("Time to live for cache entries must a positive number!");
 	}
 	//Assemble the call to add the entry to the cache
@@ -148,7 +148,7 @@ Cache.prototype.putIfAbsent = function(key, val, ttl, callback) {
                     'returnOld':'true'
                   }
 				        };
-	if(ttl){
+	if(ttl && ttl > 0){
 		options.qs.ttl = ttl;
 	}
 	//Serialize the body if appropriate
