@@ -15,13 +15,14 @@ if(shouldMock){
 
 }
 
-
+/*
 //Uncomment to record the calls
-process.env.CACHING_INTERNAL_CACHE_URL = "coh-dev3.au.oracle.com";
+process.env.CACHING_INTERNAL_CACHE_URL = "internal_instance";
 nock.recorder.rec({
   dont_print: true,
   output_objects: true
 });
+*/
 
 var Cache = require("../cache_handler");
 
@@ -394,12 +395,12 @@ describe("ACCS Cache Services", function(){
 
   //Clear our testingData
   after(function(){
-    
+    /*
     //Uncomment to create nock objects!
     var nockCalls = nock.recorder.play();
     require('fs').writeFileSync("./test/mocks.json", JSON.stringify(nockCalls, null, 2));
     console.log("Wrote mocks.json!");
-    
+    */
     
     testCache.clear(function(err){
       if(err){
