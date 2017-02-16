@@ -15,14 +15,14 @@ if(shouldMock){
 
 }
 
-/*
+
 //Uncomment to record the calls
-process.env.CACHING_INTERNAL_CACHE_URL = "<internal cache url>";
+process.env.CACHING_INTERNAL_CACHE_URL = "coh-dev3.au.oracle.com";
 nock.recorder.rec({
   dont_print: true,
   output_objects: true
 });
-*/
+
 var Cache = require("../cache_handler");
 
 var cacheName = "MOCHA_Test_Cache";
@@ -374,16 +374,32 @@ describe("ACCS Cache Services", function(){
         done();
       });
     });
+    it("Get cache metrics is correctly empty for non-existant caches", function(done){
+      var testMetricsCache = new Cache("MOCHA_Cache_For_Metrics");
+      testMetricsCache.stats(function(err, res){
+        if(err){
+          done(err);
+          return;
+        }
+        expect(res).to.include.keys('cache');
+        expect(res.cache).to.equal("MOCHA_Cache_For_Metrics");
+        expect(res).to.include.keys('count');
+        expect(res.count).to.equal(0);
+        expect(res).to.include.keys('size');
+        expect(res.size).to.equal(0);
+        done();
+      });
+    });
   }); 
 
   //Clear our testingData
   after(function(){
-    /*
+    
     //Uncomment to create nock objects!
     var nockCalls = nock.recorder.play();
     require('fs').writeFileSync("./test/mocks.json", JSON.stringify(nockCalls, null, 2));
     console.log("Wrote mocks.json!");
-    */
+    
     
     testCache.clear(function(err){
       if(err){

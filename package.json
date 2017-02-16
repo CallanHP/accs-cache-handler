@@ -10,9 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/CallanHP/accs-cache-handler.git"
   },
-  "keywords": [],
+  "keywords": ["ACCS", "Oracle", "Caching"],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/CallanHP/accs-cache-handler/issues"
   },
