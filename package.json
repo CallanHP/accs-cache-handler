@@ -4,7 +4,7 @@
   "description": "",
   "main": "cache-handler.js",
   "scripts": {
-    "test": "mocha ./test/test_caches"
+    "test": "mocha --reporter spec ./test/test_caches"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,8 @@
   "homepage": "https://github.com/CallanHP/accs-cache-handler#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "nock": "^9.0.2"
   },
   "dependencies": {
     "request": "^2.79.0"

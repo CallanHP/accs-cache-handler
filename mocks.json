@@ -1,0 +1,468 @@
+[
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestKey1",
+    "body": "testVal1",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestKey2",
+    "body": {
+      "data": "This is some string data",
+      "boolean": true,
+      "number": 6
+    },
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHANumericKey",
+    "body": 15,
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAArrayKey",
+    "body": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestKey1",
+    "body": "",
+    "status": 200,
+    "response": "testVal1",
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "8"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAnotRealKey",
+    "body": "",
+    "status": 404,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "0"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestKey2",
+    "body": "",
+    "status": 200,
+    "response": {
+      "data": "This is some string data",
+      "boolean": true,
+      "number": 6
+    },
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "61"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHANumericKey",
+    "body": "",
+    "status": 200,
+    "response": 15,
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "2"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAArrayKey",
+    "body": "",
+    "status": 200,
+    "response": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "11"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestInsertedVal1",
+    "body": "TestInsert",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:14 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestInsertedVal1",
+    "body": "",
+    "status": 200,
+    "response": "TestInsert",
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:15 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "10"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAduplicatedKey",
+    "body": "value",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:15 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "POST",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAduplicatedKey?returnOld=true",
+    "body": "value2",
+    "status": 409,
+    "response": "value",
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:15 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "5"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtemporaryKey?ttl=500",
+    "body": "value",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:15 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtemporaryKey",
+    "body": "",
+    "status": 404,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "0"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/155",
+    "body": "One-Hundred-and-Fifty-Five",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/155",
+    "body": "",
+    "status": 200,
+    "response": "One-Hundred-and-Fifty-Five",
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "26"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/155",
+    "body": "",
+    "status": 200,
+    "response": "One-Hundred-and-Fifty-Five",
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "26"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAvalueToDelete",
+    "body": "value",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "DELETE",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAvalueToDelete",
+    "body": "",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAvalueToDelete",
+    "body": "",
+    "status": 404,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "0"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Cache_To_Clear/TestKey1",
+    "body": "TestVal",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "DELETE",
+    "path": "/ccs/MOCHA_Cache_To_Clear",
+    "body": "",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Cache_To_Clear",
+    "body": "",
+    "status": 200,
+    "response": {
+      "count": 0,
+      "size": 0
+    },
+    "rawHeaders": [
+      "Content-Type",
+      "application/json",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:17 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "20"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/156",
+    "body": "One-Hundred-and-Fifty-Six",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:18 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "DELETE",
+    "path": "/ccs/MOCHA_Test_Cache/156",
+    "body": "",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:18 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/156",
+    "body": "",
+    "status": 404,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Thu, 16 Feb 2017 03:51:18 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "0"
+    ]
+  },
+  {
+    "scope": "http://coh-dev3.au.oracle.com:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache",
+    "body": "",
+    "status": 200,
+    "response": {
+      "count": 7,
+      "size": 1512
+    },
+    "rawHeaders": [
+      "Content-Type",
+      "application/json",
+      "Date",
+      "Thu, 16 Feb 2017 03:51:18 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "23"
+    ]
+  }
+]
