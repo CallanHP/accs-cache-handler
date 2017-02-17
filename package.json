@@ -1,6 +1,6 @@
 {
   "name": "accs-cache-handler",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "cache_handler.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/CallanHP/accs-cache-handler.git"
   },
   "keywords": ["ACCS", "Oracle", "Caching"],
-  "author": "",
+  "author": "callan.howell-pavia@oracle.com",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/CallanHP/accs-cache-handler/issues"
