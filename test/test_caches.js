@@ -132,10 +132,14 @@ describe("ACCS Cache Services", function(){
       })
     });
 
-    it("Throw TypeErrors for non-string keys", function(){
+    it("Throw TypeErrors for non-string keys", function(done){
       try{
-        expect(testCache.get(true, function(err, res){})).to.throw(TypeError);  
-      }catch(e){}      
+        expect(testCache.get(true, function(err, res){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);  
+      }catch(e){
+        done();
+      }      
     });
 
   });
@@ -221,28 +225,36 @@ describe("ACCS Cache Services", function(){
       });
     });
 
-    it("Throw TypeErrors for non-string/numeric keys", function(){
+    it("Throw TypeErrors for non-string/numeric keys", function(done){
       try{
-        expect(testCache.put(true, "value", function(err){})).to.throw(TypeError);
-      }catch(e){}
-      var objKey = { "attr": "attr-val", "attr2": "attr2-val"};
-      try{
-        expect(testCache.putIfAbsent(objKey, "value", function(err){})).to.throw(TypeError);
-      }catch(e){}
+        expect(testCache.put(true, "value", function(err){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);
+      }catch(e){
+        var objKey = { "attr": "attr-val", "attr2": "attr2-val"};
+        try{
+          expect(testCache.putIfAbsent(objKey, "value", function(err){
+            done("Should have thrown a TypeError!");
+          })).to.throw(TypeError);
+        }catch(e){
+          done()
+        }
+      }      
     });
-    it("Throw TypeErrors for invalid ttl values", function(){
+    it("Throw TypeErrors for invalid ttl values", function(done){
       try{
-        expect(testCache.put("MOCHAinvalidTTLKey", "value", "ttlString", function(err){})).to.throw(TypeError);
-      }catch(e){}
-      try{
-        expect(testCache.put("MOCHAinvalidTTLKey", "value", -10000, function(err){})).to.throw(TypeError);
-      }catch(e){}
-      try{
-        expect(testCache.putIfAbsent("MOCHAinvalidTTLKey", "value", "ttlString", function(err){})).to.throw(TypeError);
-      }catch(e){}
-      try{
-        expect(testCache.putIfAbsent("MOCHAinvalidTTLKey", "value", -10000, function(err){})).to.throw(TypeError);
-      }catch(e){}
+        expect(testCache.put("MOCHAinvalidTTLKey", "value", "ttlString", function(err){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);
+      }catch(e){
+        try{
+          expect(testCache.putIfAbsent("MOCHAinvalidTTLKey", "value", "ttlString", function(err){
+            done("Should have thrown a TypeError!");
+          })).to.throw(TypeError);
+        }catch(e){
+          done();
+        }
+      }      
     });
   });  
   
