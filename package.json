@@ -2,7 +2,7 @@
   "name": "accs-cache-handler",
   "version": "1.0.1",
   "description": "",
-  "main": "cache-handler.js",
+  "main": "cache_handler.js",
   "scripts": {
     "test": "mocha --reporter spec ./test/test_caches"
   },
