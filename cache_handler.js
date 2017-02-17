@@ -64,6 +64,7 @@ Cache.prototype.put = function(key, val, ttl, isBlob, callback) {
 	if(typeof ttl == 'function'){
 		callback = ttl;
 		ttl = null;
+		isBlob = false;
 	}
   if(typeof ttl == 'boolean'){
     if(typeof isBlob == 'function'){
@@ -115,6 +116,7 @@ Cache.prototype.putIfAbsent = function(key, val, ttl, callback) {
 	if(typeof ttl == 'function'){
     callback = ttl;
     ttl = null;
+    isBlob = false;
   }
   if(typeof ttl == 'boolean'){
     if(typeof isBlob == 'function'){
