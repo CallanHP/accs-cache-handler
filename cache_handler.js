@@ -112,7 +112,7 @@ Cache.prototype.put = function(key, val, ttl, isBlob, callback) {
 };
 
 //Add an entry to the cache if the key is available, otherwise reject.
-Cache.prototype.putIfAbsent = function(key, val, ttl, callback) {
+Cache.prototype.putIfAbsent = function(key, val, ttl, isBlob, callback) {
 	if(typeof ttl == 'function'){
     callback = ttl;
     ttl = null;
