@@ -9,11 +9,24 @@
  */
 var request = require('request');
 
+const WARN_NO_CACHE_HOST = "Internal Caching URL is not set. Falling back on using a local hashmap instead.";
+const WARN_NO_CACHE_BINDING = "If this application is running on ACCS, ensure that you have correctly bound to a caching service.";
+
 //Retrieve the cache url set by ACCS
 var CCSHOST = process.env.CACHING_INTERNAL_CACHE_URL;
 
 function Cache(cacheName){
-	//URI Encode the cacheName???
+  //Fallback on Mock cache if it doesn't look like we are on ACCS
+  if(!process.env.CACHING_INTERNAL_CACHE_URL){
+    var MockCache = require('./mock_cache_handler.js');
+    console.warn(WARN_NO_CACHE_HOST);
+    //HOSTNAME and PORT are set by default on ACCS, so we will use them to make a guess about whether
+    //the binding is simply not set.
+    if(process.env.HOSTNAME && process.env.PORT){
+      console.warn(WARN_NO_CACHE_BINDING);
+    }
+    return new MockCache(cacheName);
+  }
 	this._cacheName = encodeURIComponent(cacheName);
 	this._cacheURL = "http://" +CCSHOST +":8080/ccs/" +this._cacheName;
 }

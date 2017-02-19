@@ -4,13 +4,17 @@
   "description": "",
   "main": "cache_handler.js",
   "scripts": {
-    "test": "mocha --reporter spec ./test/test_caches"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/CallanHP/accs-cache-handler.git"
   },
-  "keywords": ["ACCS", "Oracle", "Caching"],
+  "keywords": [
+    "ACCS",
+    "Oracle",
+    "Caching"
+  ],
   "author": "callan.howell-pavia@oracle.com",
   "license": "MIT",
   "bugs": {
@@ -20,7 +24,8 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
-    "nock": "^9.0.2"
+    "nock": "^9.0.2",
+    "test-console": "^1.0.0"
   },
   "dependencies": {
     "request": "^2.79.0"
