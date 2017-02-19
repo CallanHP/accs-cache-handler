@@ -2,6 +2,23 @@
 
 Library to provide standard, simple caching interfaces (get, put, delete) around the Caching platform services in Oracle's Application Container Cloud service.
 
+## Table of Contents
+
++ [Installation](#installation)
++ [Simple Usage](#simple-usage)
++ [ACCS Requirements](#accs-requirements)
++ [Offline Testing](#offline-testing) - i.e. Testing code not deployed to ACCS
++ [Simple Usage](#simple-usage)
++ [Full Documentation](#full-documentation)
+	* [Constructor](#constructor)
+ 	* [Cache.put()](#cacheput)
+ 	* [Cache.putIfAbsent()](#cacheputifabsent)
+ 	* [Cache.get()](#cacheget)
+ 	* [Cache.clear()](#cacheclear)
+  	* [Cache.stats()](#cachestats)
++ [About Object Types](#about-object-types)
++ [Changelog](#changelog)
+
 ## Installation
 
 ```bash
@@ -39,6 +56,11 @@ objCache.put("CachingKey", "CachingValue", function(err){
 });
 ```
 
+## ACCS Requirements
+In order to use caching in ACCS, you need to have initialised a Caching Cluster and added a binding to your application. This process is documented [here](http://docs.oracle.com/en/cloud/paas/app-container-cloud/cache/typical-workflow-creating-and-using-caches.html).
+
+*Known Issue in version 17.1.3 of ACCS:* In 17.1.3, caching hostname resolution can fail if the application has been deployed with 'isClustered' unset, or set to false. It needs to be set to true in your manifest.json file. For more information on how to do this, check [here](http://docs.oracle.com/en/cloud/paas/app-container-cloud/dvcjv/creating-meta-data-files.html).
+
 ## Offline Testing
 
 Since the ACCS Caching APIs are only available from within the ACCS Container, it can become somewhat annoying to develop applications which rely upon caching behaviour, as you cannot test your code locally without stubbing all of the caching services. Rather than have everyone who utilises this library write their own stubs, a MockCache interface is bundled for local testing which provides all of the same interfaces, and simply stores cached objects locally (to the node instance, not the instance of the MockCache object).
@@ -58,7 +80,7 @@ There is a minor difference between the interfaces in that the size attribute re
 
 ## Full Documentation
 
-While 'put', 'get', and 'delete' will take you far, sometimes you just need more capability.
+While 'put', 'get', and 'delete' will take you far, sometimes you just need more fine-grained controls. This library is designed to cover the full API capability, including TTL, precise put behaviours, etc.
 
 ### Constructor
 ```
@@ -104,15 +126,6 @@ get retrieves an entry from the cache, or returns null if there is no entry asso
 
 **callback:** the callback function for get() takes the form of callback(err, response), where response is the object which was retrieved from the cache. 'typeof response' varies, see 'About Object Types'
 
-#### About Object Types
-Objects in the cache are stored serialised, and are stored without any type information for deserialisation. As such, when performing a get, a best-guess approach is used to determine the object type to return.
-
-In many scenarios, the default behaviour will likely be fine, as implicit type conversion in Javascript lets you get away with a lot, but objType can be used as a hint for how to deserialize the object if specific behaviour is required. If set, get will attempt to coerce the result into the specified format. In addition to the standard javascript object types (excluding 'function' which is not supported), objType also accepts 'array'.
-
-If calling functions wish to parse the response themselves, it is advised to use 'string' as the objType hint, then parse the returned string as required.
-
-If you want to use typed arrays, or node.js Buffers, then you can use the 'blob' object hint, and set isBlob to true on your put. This results in the handler doing no parsing, simply putting and getting whatever has been passed to it. As this has no validation, it may throw unexpected errors, and has not been heavily tested.
-
 ### Cache.clear
 ```
 clear(callback)
@@ -136,7 +149,16 @@ stats retrieves information about the cache, including the total size and number
 }
 ```
 
-## Changelog:
+## About Object Types
+Objects in the cache are stored serialised, and are stored without any type information for deserialisation. As such, when performing a get, a best-guess approach is used to determine the object type to return.
+
+In many scenarios, the default behaviour will likely be fine, as implicit type conversion in Javascript lets you get away with a lot, but objType can be used as a hint for how to deserialize the object if specific behaviour is required. If set, get will attempt to coerce the result into the specified format. In addition to the standard javascript object types (excluding 'function' which is not supported), objType also accepts 'array'.
+
+If calling functions wish to parse the response themselves, it is advised to use 'string' as the objType hint, then parse the returned string as required.
+
+If you want to use typed arrays, or node.js Buffers, then you can use the 'blob' object hint, and set isBlob to true on your put. This results in the handler doing no parsing, simply putting and getting whatever has been passed to it. As this has no validation, it may throw unexpected errors, and has not been heavily tested.
+
+## Changelog
 
 Patch versions are used for bug and documentation-fixes.
 
