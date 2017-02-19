@@ -39,6 +39,23 @@ objCache.put("CachingKey", "CachingValue", function(err){
 });
 ```
 
+## Offline Testing
+
+Since the ACCS Caching APIs are only available from within the ACCS Container, it can become somewhat annoying to develop applications which rely upon caching behaviour, as you cannot test your code locally without stubbing all of the caching services. Rather than have everyone who utilises this library write their own stubs, a MockCache interface is bundled for local testing which provides all of the same interfaces, and simply stores cached objects locally (to the node instance, not the instance of the MockCache object).
+
+This interface is loaded automatically if the CACHING_INTERNAL_CACHE_URL environment variable isn't set. This will occur in ACCS if your Service bindings are absent or incorrect, and should occur all of the time if you are testing code locally. This means there should be no change required to take locally tested code and deploy it to an ACCS instance for SIT testing.
+
+For more information on the CACHING_INTERNAL_CACHE_URL environment variable, check the documentation [here](http://docs.oracle.com/en/cloud/paas/app-container-cloud/cache/cache-url-environment-variable.html).
+
+If for some reason you need to create a mock cache explicitly, you can do so via the .MockCache export.
+```js
+var Cache = require('accs-cache-handler');
+
+var mockCache = Cache.MockCache('Explicit-Mock-Cache');
+```
+
+There is a minor difference between the interfaces in that the size attribute returned from Cache.stats is not calculated accurately, it instead simply returns the number of entries time four. Calculating a semi-accurate memory footprint in Javascript for a flexibly sized object is pretty compute intense, and seems unneeded for most scenarios. The online value is still accurate, as it comes from the ACCS Cache instance itself
+
 ## Full Documentation
 
 While 'put', 'get', and 'delete' will take you far, sometimes you just need more capability.
@@ -119,3 +136,10 @@ stats retrieves information about the cache, including the total size and number
 }
 ```
 
+## Changelog:
+
+Patch versions are used for bug and documentation-fixes.
+
+**1.0.x:** Initial release. 
+
+**1.1.x:** Added offline-testing mode for testing code not deployed to ACCS.

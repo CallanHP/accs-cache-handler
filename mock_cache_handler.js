@@ -13,11 +13,16 @@
  * Internally, to handle TTL, objects have a 'value' and 'timeout' attribute.
  */
 
+ var _globalMockCache = {};
+
 function MockCache(cacheName){
 	//URI Encode the cacheName???
 	this._cacheName = encodeURIComponent(cacheName);
-  this._cache = {};
-  this._count = 0;
+  if(!_globalMockCache[this._cacheName]){
+    _globalMockCache[this._cacheName] = { cache: {}, count: 0};
+  }
+  this._cache = _globalMockCache[this._cacheName].cache;
+  this._count = _globalMockCache[this._cacheName].count;
 }
 
 MockCache.prototype.get = function(key, objType, callback){

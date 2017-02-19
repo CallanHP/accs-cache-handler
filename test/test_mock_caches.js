@@ -64,6 +64,12 @@ describe("Mock Cache Services", function(){
           ["Internal Caching URL is not set. Falling back on using a local hashmap instead.\n",
           "If this application is running on ACCS, ensure that you have correctly bound to a caching service.\n"]);
     });
+    //Test explicit MockCache class creation from Cache works
+    it("Create a MockCache explicitly from the Cache export", function(){
+      var Cache = require("../cache_handler.js").MockCache;
+      var newCache = new Cache("Test-Mock-Cache-Explicit");
+      expect(newCache).to.have.property('_cache');
+    });
   });
   //Test reads
   describe("Test getting entries from the cache", function(){
@@ -373,6 +379,21 @@ describe("Mock Cache Services", function(){
       });
     });
   }); 
+
+  describe("Global Cache Behaviour", function(){
+    it("Value survives cache object teardown", function(done){
+      var testingGlobalCacheName = "MOCHA_Global_Cache_Testing";
+      var newMockCacheOne = new MockCache(testingGlobalCacheName);
+      newMockCacheOne.put("GlobalTestKey","TestValue", function(err){
+        delete newMockCacheOne;
+        var newMockCacheTwo = new MockCache(testingGlobalCacheName);
+        newMockCacheTwo.get("GlobalTestKey", function(err, res){
+          expect(res).to.equal("TestValue");
+          done();
+        });
+      });  
+    });
+  });
   
   describe("Misc", function(){
     //Call 'get cache metrics' on our testing cache. 
@@ -412,25 +433,7 @@ describe("Mock Cache Services", function(){
 
   //Clear our testingData
   after(function(){
-    /*
-    //Uncomment to create nock objects!
-    var nockCalls = nock.recorder.play();
-    require('fs').writeFileSync("./test/mocks.json", JSON.stringify(nockCalls, null, 2));
-    console.log("Wrote mocks.json!");
-    */
-    
-    testCache.clear(function(err){
-      if(err){
-        testCache.delete("MOCHAtestKey1", function(err){});
-        testCache.delete("MOCHAtestInsertedVal1", function(err){});
-        testCache.delete("MOCHAduplicatedKey", function(err){});
-        testCache.delete("MOCHAtemporaryKey", function(err){});
-        testCache.delete("MOCHAvalueToDelete", function(err){});
-        testCache.delete("MOCHABlobKey", function(err){});
-        testCache.delete(155, function(err){});
-        return;
-      }
-    });    
+    testCache.clear(function(err){});    
   });
 
 });
