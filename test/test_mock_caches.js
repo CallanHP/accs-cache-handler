@@ -41,7 +41,7 @@ describe("Mock Cache Services", function(){
   describe("Cache Initialisation", function(){
 
     //Test local fallback works
-    it("Create an ACCS Cache without CACHING_INTERNAL_CACHE_URL set creates MockCache", function(){
+    it("Create an ACCS Cache without CACHING_INTERNAL_CACHE_URL set creates MockCache", function(done){
       delete process.env.CACHING_INTERNAL_CACHE_URL;
       var Cache = require("../cache_handler.js");
       var inspect = stderr.inspect();
@@ -49,7 +49,20 @@ describe("Mock Cache Services", function(){
       inspect.restore();
       expect(newCache).to.have.property('_cache');
       expect(inspect.output).to.have.members(["Internal Caching URL is not set. Falling back on using a local hashmap instead.\n"]);
+      newCache.put("MOCHAFirstMockKey", "testVal", function(err){
+        if(err){
+          done(err);
+        }
+        newCache.get("MOCHAFirstMockKey", function(err, res){
+          if(err){
+            done(err);
+          }
+          expect(res).to.equal("testVal");
+          done();
+        })
+      })
     });
+
     //Test remote fallback works
     it("Create an ACCS Cache without CACHING_INTERNAL_CACHE_URL but other ACCS vars set creates MockCache and warns", function(){
       delete process.env.CACHING_INTERNAL_CACHE_URL;
