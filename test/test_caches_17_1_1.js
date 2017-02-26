@@ -10,7 +10,7 @@ if(process.env.TEST_WITH_REAL_CACHE_ENDPOINTS && process.env.TEST_WITH_REAL_CACH
 if(shouldMock){
   process.env.CACHING_INTERNAL_CACHE_URL = "mock_offline_testing_hostname";
   //Load nock object json
-  mockServices = nock.load("./test/mocks.json");
+  mockServices = nock.load("./test/mocks_17_1_1.json");
 }else{
 
 }
@@ -34,7 +34,7 @@ testEntry.boolean = true;
 testEntry.number = 6;
 
 
-describe("ACCS Cache Services", function(){
+describe("ACCS Cache Services Base Functionality - 17.1.1 Release", function(){
   //Insert some dummy data
   before(function(done){
     testCache.put("MOCHAtestKey1", "testVal1", function(err){
