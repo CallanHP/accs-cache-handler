@@ -1,4 +1,4 @@
-var expect = require('chai').expect
+var expect = require('chai').expect;
 var nock = require('nock');
 
 //Set up offline testing if required
