@@ -2,6 +2,15 @@
 
 Library to provide standard, simple caching interfaces (get, put, delete) around the Caching platform services in Oracle's Application Container Cloud service.
 
+## Safe Harbor - 17.1.5 Features Branch
+
+*Purpose:* All code available here are a reflection of possible features and enhancements included in release 17.1.5. 
+
+*DISCLAIMER:*
+
+IT IS NOT A COMMITMENT TO DELIVER ANY MATERIAL, CODE, OR FUNCTIONALITY, AND SHOULD NOT BE RELIED UPON IN MAKING PURCHASING DECISIONS. THE DEVELOPMENT, RELEASE, AND TIMING OF ANY FEATURES OR FUNCTIONALITY DESCRIBED IN THIS DOCUMENT REMAINS AT THE SOLE DISCRETION OF ORACLE.   
+DUE TO THE NATURE OF THE PRODUCT ARCHITECTURE, IT MAY NOT BE POSSIBLE TO SAFELY INCLUDE ALL FEATURES DESCRIBED IN THIS DOCUMENT WITHOUT RISKING SIGNIFICANT DESTABILIZATION OF THE CODE.
+
 ## Table of Contents
 
 + [Installation](#installation)
