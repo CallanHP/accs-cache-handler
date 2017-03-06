@@ -195,10 +195,10 @@ MockCache.prototype.replace = function(key, val, oldVal, ttl, callback) {
     clearTimeout(this._cache[key].timeout);
   }
   this._cache[key] = {};
-  if(!isBuffer){
-    this._cache[key].value = val;  
-  }else{
+  if(Buffer.isBuffer(val)){
     this._cache[key].value = val.toString('utf8');
+  }else{
+    this._cache[key].value = val;  
   }
   //Handle ttl
   if(ttl && ttl > 0){

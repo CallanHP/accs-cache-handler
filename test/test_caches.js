@@ -10,19 +10,19 @@ if(process.env.TEST_WITH_REAL_CACHE_ENDPOINTS && process.env.TEST_WITH_REAL_CACH
 if(shouldMock){
   process.env.CACHING_INTERNAL_CACHE_URL = "mock_offline_testing_hostname";
   //Load nock object json
-  mockServices = nock.load("./test/mocks_17_1_1.json");
+  mockServices = nock.load("./test/mocks.json");
 }else{
 
 }
 
 /*
 //Uncomment to record the calls
-process.env.CACHING_INTERNAL_CACHE_URL = "internal_instance";
+//process.env.CACHING_INTERNAL_CACHE_URL = "internal_instance";
 nock.recorder.rec({
   dont_print: true,
   output_objects: true
-});
-*/
+});*/
+
 
 var Cache = require("../cache_handler");
 
@@ -257,152 +257,6 @@ describe("ACCS Cache Services Base Functionality - 17.1.1 Release", function(){
       }      
     });
   });
-
-  //Test Cache Replace Operation
-  describe("Test replacing entries in the cache", function(){
-    it("Replace a simple value", function(done){
-      testCache.put("MOCHAtestReplaceValue", "TestInsertBefore", function(err){
-        if(err){
-          done(err);
-          return;
-        }
-        testCache.replace("MOCHAtestReplaceValue", "TestInsertAfter", "TestInsertBefore", function(err){
-          if(err){
-            done(err);
-            return;
-          }
-          testCache.get("MOCHAtestReplaceValue", function(err, res){
-            if(err){
-              done(err);
-              return;
-            }
-            expect(res).to.equal("TestInsertAfter");
-            done();
-          });
-        });
-      });
-    });
-
-    it("Replace a complex value", function(done){
-      var oldValue = { name: "TestInsertName",
-                       parameter: true
-                     };
-      testCache.put("MOCHAtestReplaceValueComplex", oldValue, function(err){
-        if(err){
-          done(err);
-          return;
-        }
-        var newValue = { name: "TestInsertName",
-                         parameter: false
-                       };
-        testCache.replace("MOCHAtestReplaceValueComplex", newValue, oldValue, function(err){
-          if(err){
-            done(err);
-            return;
-          }
-          testCache.get("MOCHAtestReplaceValueComplex", function(err, res){
-            if(err){
-              done(err);
-              return;
-            }
-            expect(res).to.deep.equal(newValue);
-            done();
-          });
-        });
-      });
-    });
-
-    it("Attempt to replace a simple value with wrong old value", function(done){
-      testCache.put("MOCHAtestReplaceValue", "TestInsertBefore", function(err){
-        if(err){
-          done(err);
-          return;
-        }
-        testCache.replace("MOCHAtestReplaceValue", "TestInsertAfter", "TestInsertEvenOlder", function(err){
-          expect(err).to.exist;
-          expect(err.message).to.contain('cached value does not equal oldVal');
-          testCache.get("MOCHAtestReplaceValue", function(err, res){
-            if(err){
-              done(err);
-              return;
-            }
-            expect(res).to.equal("TestInsertBefore");
-            done();
-          });
-        });
-      });
-    });
-
-    it("Attempt to replace a complex value with wrong old value", function(done){
-      var oldValue = { name: "TestInsertName",
-                       parameter: true
-                     };
-      testCache.put("MOCHAtestReplaceValueComplex", oldValue, function(err){
-        if(err){
-          done(err);
-          return;
-        }
-        var newValue = { name: "TestInsertName",
-                         parameter: false
-                       };
-        testCache.replace("MOCHAtestReplaceValueComplex", newValue, {name: "Wrong entry!"}, function(err){
-          expect(err).to.exist;
-          expect(err.message).to.contain('cached value does not equal oldVal');
-          testCache.get("MOCHAtestReplaceValueComplex", function(err, res){
-            if(err){
-              done(err);
-              return;
-            }
-            expect(res).to.deep.equal(oldValue);
-            done();
-          });
-        });
-      });
-    });
-
-    it("Throw TypeErrors for non-string/numeric keys", function(done){
-      try{
-        expect(testCache.replace(true, "value", "old", function(err){
-          done("Should have thrown a TypeError!");
-        })).to.throw(TypeError);
-      }catch(e){
-        var objKey = { "attr": "attr-val", "attr2": "attr2-val"};
-        try{
-          expect(testCache.replace(objKey, "value", "old", function(err){
-            done("Should have thrown a TypeError!");
-          })).to.throw(TypeError);
-        }catch(e){
-          done()
-        }
-      }      
-    });
-
-    it("Throw SyntaxErrors for missing parameters", function(done){
-      try{
-        expect(testCache.replace("value", "oldVal", function(err){
-          done("Should have thrown a TypeError!");
-        })).to.throw(TypeError);
-      }catch(e){
-        try{
-          expect(testCache.replace(function(err){
-            done("Should have thrown a TypeError!");
-          })).to.throw(TypeError);
-        }catch(e){
-          done()
-        }
-      }      
-    });
-
-    it("Throw TypeErrors for invalid ttl values", function(done){
-      try{
-        expect(testCache.replace("MOCHAinvalidTTLKey", "value", "oldValue", "ttlString", function(err){
-          done("Should have thrown a TypeError!");
-        })).to.throw(TypeError);
-      }catch(e){
-        done();
-      }      
-    });
-  });
   
   describe("Test Deleting entries from the cache", function(){
     //Test deleting a value
@@ -552,12 +406,7 @@ describe("ACCS Cache Services Base Functionality - 17.1.1 Release", function(){
 
   //Clear our testingData
   after(function(){
-    /*
-    //Uncomment to create nock objects!
-    var nockCalls = nock.recorder.play();
-    require('fs').writeFileSync("./test/mocks.json", JSON.stringify(nockCalls, null, 2));
-    console.log("Wrote mocks.json!");
-    */
+    
     
     testCache.clear(function(err){
       if(err){
@@ -573,4 +422,161 @@ describe("ACCS Cache Services Base Functionality - 17.1.1 Release", function(){
     });    
   });
 
+});
+
+describe("ACCS Cache Services Functionality - 17.1.5 Release", function(){
+  //Test Cache Replace Operation
+  describe("Test replacing entries in the cache", function(){
+    it("Replace a simple value", function(done){
+      testCache.put("MOCHAtestReplaceValue", "TestInsertBefore", function(err){
+        if(err){
+          done(err);
+          return;
+        }
+        testCache.replace("MOCHAtestReplaceValue", "TestInsertAfter", "TestInsertBefore", function(err){
+          if(err){
+            done(err);
+            return;
+          }
+          testCache.get("MOCHAtestReplaceValue", function(err, res){
+            if(err){
+              done(err);
+              return;
+            }
+            expect(res).to.equal("TestInsertAfter");
+            done();
+          });
+        });
+      });
+    });
+
+    it("Replace a complex value", function(done){
+      var oldValue = { name: "TestInsertName",
+                       parameter: true
+                     };
+      testCache.put("MOCHAtestReplaceValueComplex", oldValue, function(err){
+        if(err){
+          done(err);
+          return;
+        }
+        var newValue = { name: "TestInsertName",
+                         parameter: false
+                       };
+        testCache.replace("MOCHAtestReplaceValueComplex", newValue, oldValue, function(err){
+          if(err){
+            done(err);
+            return;
+          }
+          testCache.get("MOCHAtestReplaceValueComplex", function(err, res){
+            if(err){
+              done(err);
+              return;
+            }
+            expect(res).to.deep.equal(newValue);
+            done();
+          });
+        });
+      });
+    });
+
+    it("Attempt to replace a simple value with wrong old value", function(done){
+      testCache.put("MOCHAtestReplaceValue", "TestInsertBefore", function(err){
+        if(err){
+          done(err);
+          return;
+        }
+        testCache.replace("MOCHAtestReplaceValue", "TestInsertAfter", "TestInsertEvenOlder", function(err){
+          expect(err).to.exist;
+          expect(err.message).to.contain('cached value does not equal oldVal');
+          testCache.get("MOCHAtestReplaceValue", function(err, res){
+            if(err){
+              done(err);
+              return;
+            }
+            expect(res).to.equal("TestInsertBefore");
+            done();
+          });
+        });
+      });
+    });
+
+    it("Attempt to replace a complex value with wrong old value", function(done){
+      var oldValue = { name: "TestInsertName",
+                       parameter: true
+                     };
+      testCache.put("MOCHAtestReplaceValueComplex", oldValue, function(err){
+        if(err){
+          done(err);
+          return;
+        }
+        var newValue = { name: "TestInsertName",
+                         parameter: false
+                       };
+        testCache.replace("MOCHAtestReplaceValueComplex", newValue, {name: "Wrong entry!"}, function(err){
+          expect(err).to.exist;
+          expect(err.message).to.contain('cached value does not equal oldVal');
+          testCache.get("MOCHAtestReplaceValueComplex", function(err, res){
+            if(err){
+              done(err);
+              return;
+            }
+            expect(res).to.deep.equal(oldValue);
+            done();
+          });
+        });
+      });
+    });
+
+    it("Throw TypeErrors for non-string/numeric keys", function(done){
+      try{
+        expect(testCache.replace(true, "value", "old", function(err){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);
+      }catch(e){
+        var objKey = { "attr": "attr-val", "attr2": "attr2-val"};
+        try{
+          expect(testCache.replace(objKey, "value", "old", function(err){
+            done("Should have thrown a TypeError!");
+          })).to.throw(TypeError);
+        }catch(e){
+          done()
+        }
+      }      
+    });
+
+    it("Throw SyntaxErrors for missing parameters", function(done){
+      try{
+        expect(testCache.replace("value", "oldVal", function(err){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);
+      }catch(e){
+        try{
+          expect(testCache.replace(function(err){
+            done("Should have thrown a TypeError!");
+          })).to.throw(TypeError);
+        }catch(e){
+          done()
+        }
+      }      
+    });
+
+    it("Throw TypeErrors for invalid ttl values", function(done){
+      try{
+        expect(testCache.replace("MOCHAinvalidTTLKey", "value", "oldValue", "ttlString", function(err){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);
+      }catch(e){
+        done();
+      }      
+    });
+  });
+  /*
+  //Uncomment to create nock objects!
+  after(function(){
+    
+    
+    var nockCalls = nock.recorder.play();
+    require('fs').writeFileSync("./test/mocks.json", JSON.stringify(nockCalls, null, 2));
+    console.log("Wrote mocks.json!");
+  });*/
 });

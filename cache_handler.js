@@ -218,7 +218,7 @@ Cache.prototype.replace = function(key, val, oldVal, ttl, callback) {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/x-multivalue-octet-stream',
-                    'X-Method': 'replace'
+                    'X-Method': 'replaceValue'
                   }
                 };
   if(ttl && ttl > 0){
@@ -227,12 +227,12 @@ Cache.prototype.replace = function(key, val, oldVal, ttl, callback) {
   //Assemble the required multi-value to pass
   var mvBody = [];
   //Serialize the body if appropriate
-  if((typeof oldVal == 'string' || Buffer.isBuffer(oldVal)){
+  if(typeof oldVal == 'string' || Buffer.isBuffer(oldVal)){
     mvBody.push(oldVal);
   }else{
     mvBody.push(JSON.stringify(oldVal));
   }
-  if((typeof val == 'string' || Buffer.isBuffer(val)){
+  if(typeof val == 'string' || Buffer.isBuffer(val)){
     mvBody.push(val);
   }else{
     mvBody.push(JSON.stringify(val));

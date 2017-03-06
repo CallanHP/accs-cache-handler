@@ -7,6 +7,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close"
     ]
@@ -23,6 +25,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close"
     ]
@@ -35,6 +39,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close"
     ]
@@ -53,6 +59,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close"
     ]
@@ -67,6 +75,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -81,6 +91,8 @@
     "status": 404,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -101,6 +113,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -117,6 +131,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -133,6 +149,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -155,6 +173,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:09 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -169,6 +189,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:10 GMT",
       "Connection",
       "close"
     ]
@@ -183,6 +205,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:10 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -197,6 +221,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:10 GMT",
       "Connection",
       "close"
     ]
@@ -211,6 +237,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:10 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -225,6 +253,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:10 GMT",
       "Connection",
       "close"
     ]
@@ -237,6 +267,8 @@
     "status": 404,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -251,6 +283,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close"
     ]
@@ -265,6 +299,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -281,6 +317,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -295,6 +333,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close"
     ]
@@ -307,6 +347,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close"
     ]
@@ -319,6 +361,8 @@
     "status": 404,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -333,6 +377,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close"
     ]
@@ -345,6 +391,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close"
     ]
@@ -362,6 +410,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/json",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:12 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -376,6 +426,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
       "Connection",
       "close"
     ]
@@ -388,6 +440,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
       "Connection",
       "close"
     ]
@@ -400,6 +454,8 @@
     "status": 404,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -414,6 +470,8 @@
     "status": 204,
     "response": "",
     "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
       "Connection",
       "close"
     ]
@@ -428,6 +486,8 @@
     "rawHeaders": [
       "Content-Type",
       "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
       "Connection",
       "close",
       "Content-Length",
@@ -441,16 +501,18 @@
     "body": "",
     "status": 200,
     "response": {
-      "count": 8,
-      "size": 2224
+      "count": 10,
+      "size": 2704
     },
     "rawHeaders": [
       "Content-Type",
       "application/json",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
       "Connection",
       "close",
       "Content-Length",
-      "23"
+      "24"
     ]
   },
   {
@@ -466,10 +528,226 @@
     "rawHeaders": [
       "Content-Type",
       "application/json",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
       "Connection",
       "close",
       "Content-Length",
       "20"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "DELETE",
+    "path": "/ccs/MOCHA_Test_Cache",
+    "body": "",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValue",
+    "body": "TestInsertBefore",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "POST",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValue",
+    "body": "\u0000\u0000\u0000\u0002\u0000\u0000\u0000\u0010TestInsertBefore\u0000\u0000\u0000\u000fTestInsertAfter",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValue",
+    "body": "",
+    "status": 200,
+    "response": "TestInsertAfter",
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:13 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "15"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValueComplex",
+    "body": {
+      "name": "TestInsertName",
+      "parameter": true
+    },
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:14 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "POST",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValueComplex",
+    "body": "\u0000\u0000\u0000\u0002\u0000\u0000\u0000*{\"name\":\"TestInsertName\",\"parameter\":true}\u0000\u0000\u0000+{\"name\":\"TestInsertName\",\"parameter\":false}",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:14 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValueComplex",
+    "body": "",
+    "status": 200,
+    "response": {
+      "name": "TestInsertName",
+      "parameter": false
+    },
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "43"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValue",
+    "body": "TestInsertBefore",
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:14 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "POST",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValue",
+    "body": "\u0000\u0000\u0000\u0002\u0000\u0000\u0000\u0013TestInsertEvenOlder\u0000\u0000\u0000\u000fTestInsertAfter",
+    "status": 409,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "0"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValue",
+    "body": "",
+    "status": 200,
+    "response": "TestInsertBefore",
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "16"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "PUT",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValueComplex",
+    "body": {
+      "name": "TestInsertName",
+      "parameter": true
+    },
+    "status": 204,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:14 GMT",
+      "Connection",
+      "close"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "POST",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValueComplex",
+    "body": "\u0000\u0000\u0000\u0002\u0000\u0000\u0000\u0017{\"name\":\"Wrong entry!\"}\u0000\u0000\u0000+{\"name\":\"TestInsertName\",\"parameter\":false}",
+    "status": 409,
+    "response": "",
+    "rawHeaders": [
+      "Date",
+      "Mon, 06 Mar 2017 06:45:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "0"
+    ]
+  },
+  {
+    "scope": "http://mock_offline_testing_hostname:8080",
+    "method": "GET",
+    "path": "/ccs/MOCHA_Test_Cache/MOCHAtestReplaceValueComplex",
+    "body": "",
+    "status": 200,
+    "response": {
+      "name": "TestInsertName",
+      "parameter": true
+    },
+    "rawHeaders": [
+      "Content-Type",
+      "application/octet-stream",
+      "Date",
+      "Mon, 06 Mar 2017 06:45:14 GMT",
+      "Connection",
+      "close",
+      "Content-Length",
+      "42"
     ]
   }
 ]
