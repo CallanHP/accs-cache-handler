@@ -9,6 +9,7 @@
  */
 var request = require('request');
 var MockCache = require('./mock_cache_handler.js');
+var multivalue = require("./util/multivalue");
 
 const WARN_NO_CACHE_HOST = "Internal Caching URL is not set. Falling back on using a local hashmap instead.";
 const WARN_NO_CACHE_BINDING = "If this application is running on ACCS, ensure that you have correctly bound to a caching service.";
@@ -33,6 +34,9 @@ function Cache(cacheName){
 
 //Retreive an entry from the cache
 Cache.prototype.get = function(key, objType, callback){
+  if(key == undefined || typeof key == 'function'){
+    throw new SyntaxError("key is a required parameter for get!");
+  }
 	if(typeof objType == 'function'){
 		callback = objType;
 		objType = null;
@@ -73,22 +77,25 @@ Cache.prototype.get = function(key, objType, callback){
 }
 
 //Add an entry to the cache
-Cache.prototype.put = function(key, val, ttl, isBlob, callback) {
-	if(typeof ttl == 'function'){
+Cache.prototype.put = function(key, val, ttl, isBuffer, callback) {
+	if(key == undefined || val == undefined || typeof key == 'function' || typeof val == 'function'){
+    throw new SyntaxError("key and val are required parameters for put!");
+  }
+  if(typeof ttl == 'function'){
 		callback = ttl;
 		ttl = null;
-		isBlob = false;
+		isBuffer = false;
 	}
   if(typeof ttl == 'boolean'){
-    if(typeof isBlob == 'function'){
-      callback = isBlob;
+    if(typeof isBuffer == 'function'){
+      callback = isBuffer;
     }
-    isBlob = ttl;
+    isBuffer = ttl;
     ttl = null;
   }
-  if(typeof isBlob == 'function'){
-    callback = isBlob;
-    isBlob = false;
+  if(typeof isBuffer == 'function'){
+    callback = isBuffer;
+    isBuffer = false;
   }
 	if(typeof key == 'number'){
 		key = String(key);
@@ -110,11 +117,11 @@ Cache.prototype.put = function(key, val, ttl, isBlob, callback) {
 		options.qs = {'ttl':ttl};
 	}
 	//Serialize the body if appropriate
-	if(typeof val != 'string' && !isBlob){
-		options.body = JSON.stringify(val);
-	}else{
-		options.body = val;
-	}
+	if(typeof val == 'string' || Buffer.isBuffer(val)){
+    options.body = val;
+  }else{
+    options.body = JSON.stringify(val);
+  }
 	request(options, function(err, response, body){
 		if(err){
 			callback(err);
@@ -125,22 +132,25 @@ Cache.prototype.put = function(key, val, ttl, isBlob, callback) {
 };
 
 //Add an entry to the cache if the key is available, otherwise reject.
-Cache.prototype.putIfAbsent = function(key, val, ttl, isBlob, callback) {
+Cache.prototype.putIfAbsent = function(key, val, ttl, isBuffer, callback) {
+  if(key == undefined || val == undefined || typeof key == 'function' || typeof val == 'function'){
+    throw new SyntaxError("key and val are required parameters for putIfAbsent!");
+  }
 	if(typeof ttl == 'function'){
     callback = ttl;
     ttl = null;
-    isBlob = false;
+    isBuffer = false;
   }
   if(typeof ttl == 'boolean'){
-    if(typeof isBlob == 'function'){
-      callback = isBlob;
+    if(typeof isBuffer == 'function'){
+      callback = isBuffer;
     }
-    isBlob = ttl;
+    isBuffer = ttl;
     ttl = null;
   }
-  if(typeof isBlob == 'function'){
-    callback = isBlob;
-    isBlob = false;
+  if(typeof isBuffer == 'function'){
+    callback = isBuffer;
+    isBuffer = false;
   }
 	if(typeof key == 'number'){
 		key = String(key);
@@ -167,10 +177,10 @@ Cache.prototype.putIfAbsent = function(key, val, ttl, isBlob, callback) {
 		options.qs.ttl = ttl;
 	}
 	//Serialize the body if appropriate
-	if(typeof val != 'string' && !isBlob){
-		options.body = JSON.stringify(val);
-	}else{
+	if(typeof val == 'string' || Buffer.isBuffer(val)){
 		options.body = val;
+	}else{
+		options.body = JSON.stringify(val);
 	}
 	request(options, function(err, response, body){
 		if(response && response.statusCode == 409){
@@ -185,8 +195,67 @@ Cache.prototype.putIfAbsent = function(key, val, ttl, isBlob, callback) {
 	});
 };
 
+Cache.prototype.replace = function(key, val, oldVal, ttl, callback) {
+  if(key == undefined || val == undefined || oldVal == undefined
+    || typeof key == 'function' || typeof val == 'function' || typeof oldVal == 'function'){
+    throw new SyntaxError("key, val and oldVal are required parameters for replace!");
+  }
+  if(typeof ttl == 'function'){
+    callback = ttl;
+    ttl = null;
+  }
+  if(typeof key == 'number'){
+    key = String(key);
+  }
+  if(typeof key != 'string'){
+    throw new TypeError("Caching keys must be strings or numbers!");
+  }
+  if(ttl && typeof ttl != 'number'){
+    throw new TypeError("Time to live for cache entries must a positive number!");
+  }
+  //Assemble the call to add the entry to the cache
+  var options = { url: this._cacheURL +"/" +encodeURIComponent(key),
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/x-multivalue-octet-stream',
+                    'X-Method': 'replace'
+                  }
+                };
+  if(ttl && ttl > 0){
+    options.qs = {'ttl':ttl};
+  }
+  //Assemble the required multi-value to pass
+  var mvBody = [];
+  //Serialize the body if appropriate
+  if((typeof oldVal == 'string' || Buffer.isBuffer(oldVal)){
+    mvBody.push(oldVal);
+  }else{
+    mvBody.push(JSON.stringify(oldVal));
+  }
+  if((typeof val == 'string' || Buffer.isBuffer(val)){
+    mvBody.push(val);
+  }else{
+    mvBody.push(JSON.stringify(val));
+  }
+  options.body = multivalue.encode(mvBody);
+  request(options, function(err, response, body){
+    if(response && response.statusCode == 409){
+      callback(new Error('Did not insert entry, cached value does not equal oldVal supplied.'));
+      return;
+    }
+    if(err){
+      callback(err);
+      return;
+    }
+    callback(null);
+  });
+};
+
 //Delete an entry from the cache
 Cache.prototype.delete = function(key, callback) {
+  if(key == undefined || typeof key == 'function'){
+    throw new SyntaxError("key is a required parameter for delete!");
+  }
 	if(typeof key == 'number'){
 		key = String(key);
 	}
@@ -255,9 +324,10 @@ function _coerceObjectType(obj, objHint){
   if(objHint){
     switch(objHint){
       case 'string':
-      case 'blob':
         //Response that comes back is application/octet-stream, which we will return raw
         return obj;
+      case 'buffer':
+        return Buffer.from(obj, 'utf8');
       case 'number':
         var num = Number(obj);
         if(isNaN(num)){

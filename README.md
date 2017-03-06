@@ -2,15 +2,6 @@
 
 Library to provide standard, simple caching interfaces (get, put, delete) around the Caching platform services in Oracle's Application Container Cloud service.
 
-## Safe Harbor - 17.1.5 Features Branch
-
-*Purpose:* All code available here are a reflection of possible features and enhancements included in release 17.1.5. 
-
-*DISCLAIMER:*
-
-IT IS NOT A COMMITMENT TO DELIVER ANY MATERIAL, CODE, OR FUNCTIONALITY, AND SHOULD NOT BE RELIED UPON IN MAKING PURCHASING DECISIONS. THE DEVELOPMENT, RELEASE, AND TIMING OF ANY FEATURES OR FUNCTIONALITY DESCRIBED IN THIS DOCUMENT REMAINS AT THE SOLE DISCRETION OF ORACLE.   
-DUE TO THE NATURE OF THE PRODUCT ARCHITECTURE, IT MAY NOT BE POSSIBLE TO SAFELY INCLUDE ALL FEATURES DESCRIBED IN THIS DOCUMENT WITHOUT RISKING SIGNIFICANT DESTABILIZATION OF THE CODE.
-
 ## Table of Contents
 
 + [Installation](#installation)
@@ -23,6 +14,7 @@ DUE TO THE NATURE OF THE PRODUCT ARCHITECTURE, IT MAY NOT BE POSSIBLE TO SAFELY 
  	* [Cache.put()](#cacheput)
  	* [Cache.putIfAbsent()](#cacheputifabsent)
  	* [Cache.get()](#cacheget)
+ 	* [Cache.replace()](#cachereplace)
  	* [Cache.clear()](#cacheclear)
   	* [Cache.stats()](#cachestats)
 + [About Object Types](#about-object-types)
@@ -68,8 +60,6 @@ objCache.put("CachingKey", "CachingValue", function(err){
 ## ACCS Requirements
 In order to use caching in ACCS, you need to have initialised a Caching Cluster and added a binding to your application. This process is documented [here](http://docs.oracle.com/en/cloud/paas/app-container-cloud/cache/typical-workflow-creating-and-using-caches.html).
 
-*Known Issue in version 17.1.3 of ACCS:* In 17.1.3, caching hostname resolution can fail if the application has been deployed with 'isClustered' unset, or set to false. It needs to be set to true in your manifest.json file. For more information on how to do this, check [here](http://docs.oracle.com/en/cloud/paas/app-container-cloud/dvcjv/creating-meta-data-files.html).
-
 ## Offline Testing
 
 Since the ACCS Caching APIs are only available from within the ACCS Container, it can become somewhat annoying to develop applications which rely upon caching behaviour, as you cannot test your code locally without stubbing all of the caching services. Rather than have everyone who utilises this library write their own stubs, a MockCache interface is bundled for local testing which provides all of the same interfaces, and simply stores cached objects locally (to the node instance, not the instance of the MockCache object).
@@ -85,7 +75,7 @@ var Cache = require('accs-cache-handler');
 var mockCache = Cache.MockCache('Explicit-Mock-Cache');
 ```
 
-There is a minor difference between the interfaces in that the size attribute returned from Cache.stats is not calculated accurately, it instead simply returns the number of entries time four. Calculating a semi-accurate memory footprint in Javascript for a flexibly sized object is pretty compute intense, and seems unneeded for most scenarios. The online value is still accurate, as it comes from the ACCS Cache instance itself
+There is a minor difference between the interfaces in that the size attribute returned from Cache.stats is not calculated accurately, it instead simply returns the number of entries time four. Calculating a semi-accurate memory footprint in Javascript for a flexibly sized object is pretty compute intense, and seems unneeded for most scenarios. The online value is still accurate, as it comes from the ACCS Cache instance itself.
 
 ## Full Documentation
 
@@ -103,7 +93,7 @@ Notably, this doesn't create or join a cache, as cache creation in ACCS is dynam
 
 ### Cache.put
 ```
-put(key, val, [ttl], [isBlob], callback)
+put(key, val, [ttl], [isBuffer], callback)
 ```
 put inserts an entry into the cache. This will overwrite any existing entry with the same key. Use putIfAbsent if this is not the desired behaviour.
 
@@ -113,13 +103,13 @@ put inserts an entry into the cache. This will overwrite any existing entry with
 
 **ttl:** (optional) time-to-live for the cache entry, in ms. An absent or negative value inserts the value with no ttl (indefinite).
 
-**isBlob:** (optional) boolean that describes whether to skip parsing the input, and instead treat it as raw data
+**isBuffer:** (optional) boolean that describes whether to skip parsing the input, and instead treat it as raw data. *Deprecated: isBuffer is no longer required, as the object type is detected dynamically*
 
 **callback:** the callback function for put() takes the form of callback(err)
 
 ### Cache.putIfAbsent
 ```
-putIfAbsent(key, val, [ttl], [isBlob], callback)
+putIfAbsent(key, val, [ttl], [isBuffer], callback)
 ```
 Cache.putIfAbsent behaves as Cache.put, though does not overwrite existing values, instead returning an error via the callback function if the key is already in use.
 
@@ -134,6 +124,22 @@ get retrieves an entry from the cache, or returns null if there is no entry asso
 **objType:** (optional) a type hint for how the response should be returned in the callback. See 'About Object Types' below for more detail.
 
 **callback:** the callback function for get() takes the form of callback(err, response), where response is the object which was retrieved from the cache. 'typeof response' varies, see 'About Object Types'
+
+### Cache.replace
+```
+replace(key, val, oldVal, [ttl], callback)
+```
+replace performs a conditional insert into the cache, inserting val associated with the key only if the current entry is equal to the supplied oldVal. Returns an error to the callback function if the cached value does not equal the supploed value. 
+
+**key:** the key used to reference the inserted value in future calls, must be a string or number (which is cast to a string, so a put on 422 will overwrite a previous put with a key of "422").
+
+**val:** the object to be inserted. See put for details.
+
+**oldVal:** the object against which the currently cached entry is checked for equality.
+
+**ttl:** (optional) time-to-live for the cache entry, in ms. An absent or negative value inserts the value with no ttl (indefinite).
+
+**callback:** the callback function for put() takes the form of callback(err)
 
 ### Cache.clear
 ```
@@ -161,11 +167,11 @@ stats retrieves information about the cache, including the total size and number
 ## About Object Types
 Objects in the cache are stored serialised, and are stored without any type information for deserialisation. As such, when performing a get, a best-guess approach is used to determine the object type to return.
 
-In many scenarios, the default behaviour will likely be fine, as implicit type conversion in Javascript lets you get away with a lot, but objType can be used as a hint for how to deserialize the object if specific behaviour is required. If set, get will attempt to coerce the result into the specified format. In addition to the standard javascript object types (excluding 'function' which is not supported), objType also accepts 'array'.
+In many scenarios, the default behaviour will likely be fine, as implicit type conversion in Javascript lets you get away with a lot, but objType can be used as a hint for how to deserialize the object if specific behaviour is required. If set, get will attempt to coerce the result into the specified format. In addition to the standard javascript object types (excluding 'function' which is not supported), objType also accepts 'array', which will attempt to coerce the response into an Array if possible (using the array constructor), and 'buffer', which will return a node.js Buffer object.
 
 If calling functions wish to parse the response themselves, it is advised to use 'string' as the objType hint, then parse the returned string as required.
 
-If you want to use typed arrays, or node.js Buffers, then you can use the 'blob' object hint, and set isBlob to true on your put. This results in the handler doing no parsing, simply putting and getting whatever has been passed to it. As this has no validation, it may throw unexpected errors, and has not been heavily tested.
+If you want to use node.js Buffers, then you can use the 'buffer' object hint, and set isBuffer to true on your put. This results in the handler doing no parsing, simply putting and getting whatever has been passed to it. As this has no validation, it may throw unexpected errors, and has not been heavily tested. By default, the Buffer object which is returned is written with the 'utf8' encoding, which should be fine for binary streams.
 
 ## Changelog
 
@@ -174,3 +180,5 @@ Patch versions are used for bug and documentation-fixes.
 **1.0.x:** Initial release. 
 
 **1.1.x:** Added offline-testing mode for testing code not deployed to ACCS.
+
+**1.2.x:** Added 17.1.5 functionality, improved handling of Buffers.

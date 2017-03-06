@@ -166,6 +166,16 @@ describe("Mock Cache Services", function(){
       }      
     });
 
+    it("Throw SyntaxError when key not supplied", function(done){
+      try{
+        expect(testCache.get(function(err, res){
+          done("Should have thrown a SyntaxError!");
+        })).to.throw(SyntaxError);  
+      }catch(e){
+        done();
+      }      
+    });
+
   });
   
   //Test Cache insertion
@@ -265,6 +275,23 @@ describe("Mock Cache Services", function(){
         }
       }      
     });
+
+    it("Throw SyntaxErrors for missing parameters", function(done){
+      try{
+        expect(testCache.put("value", function(err){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);
+      }catch(e){
+        try{
+          expect(testCache.putIfAbsent(function(err){
+            done("Should have thrown a TypeError!");
+          })).to.throw(TypeError);
+        }catch(e){
+          done()
+        }
+      }      
+    });
+
     it("Throw TypeErrors for invalid ttl values", function(done){
       try{
         expect(testCache.put("MOCHAinvalidTTLKey", "value", "ttlString", function(err){
@@ -280,7 +307,153 @@ describe("Mock Cache Services", function(){
         }
       }      
     });
-  });  
+  });
+
+  //Test Cache Replace Operation
+  describe("Test replacing entries in the cache", function(){
+    it("Replace a simple value", function(done){
+      testCache.put("MOCHAtestReplaceValue", "TestInsertBefore", function(err){
+        if(err){
+          done(err);
+          return;
+        }
+        testCache.replace("MOCHAtestReplaceValue", "TestInsertAfter", "TestInsertBefore", function(err){
+          if(err){
+            done(err);
+            return;
+          }
+          testCache.get("MOCHAtestReplaceValue", function(err, res){
+            if(err){
+              done(err);
+              return;
+            }
+            expect(res).to.equal("TestInsertAfter");
+            done();
+          });
+        });
+      });
+    });
+
+    it("Replace a complex value", function(done){
+      var oldValue = { name: "TestInsertName",
+                       parameter: true
+                     };
+      testCache.put("MOCHAtestReplaceValueComplex", oldValue, function(err){
+        if(err){
+          done(err);
+          return;
+        }
+        var newValue = { name: "TestInsertName",
+                         parameter: false
+                       };
+        testCache.replace("MOCHAtestReplaceValueComplex", newValue, oldValue, function(err){
+          if(err){
+            done(err);
+            return;
+          }
+          testCache.get("MOCHAtestReplaceValueComplex", function(err, res){
+            if(err){
+              done(err);
+              return;
+            }
+            expect(res).to.deep.equal(newValue);
+            done();
+          });
+        });
+      });
+    });
+
+    it("Attempt to replace a simple value with wrong old value", function(done){
+      testCache.put("MOCHAtestReplaceValue", "TestInsertBefore", function(err){
+        if(err){
+          done(err);
+          return;
+        }
+        testCache.replace("MOCHAtestReplaceValue", "TestInsertAfter", "TestInsertEvenOlder", function(err){
+          expect(err).to.exist;
+          expect(err.message).to.contain('cached value does not equal oldVal');
+          testCache.get("MOCHAtestReplaceValue", function(err, res){
+            if(err){
+              done(err);
+              return;
+            }
+            expect(res).to.equal("TestInsertBefore");
+            done();
+          });
+        });
+      });
+    });
+
+    it("Attempt to replace a complex value with wrong old value", function(done){
+      var oldValue = { name: "TestInsertName",
+                       parameter: true
+                     };
+      testCache.put("MOCHAtestReplaceValueComplex", oldValue, function(err){
+        if(err){
+          done(err);
+          return;
+        }
+        var newValue = { name: "TestInsertName",
+                         parameter: false
+                       };
+        testCache.replace("MOCHAtestReplaceValueComplex", newValue, {name: "Wrong entry!"}, function(err){
+          expect(err).to.exist;
+          expect(err.message).to.contain('cached value does not equal oldVal');
+          testCache.get("MOCHAtestReplaceValueComplex", function(err, res){
+            if(err){
+              done(err);
+              return;
+            }
+            expect(res).to.deep.equal(oldValue);
+            done();
+          });
+        });
+      });
+    });
+
+    it("Throw TypeErrors for non-string/numeric keys", function(done){
+      try{
+        expect(testCache.replace(true, "value", "old", function(err){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);
+      }catch(e){
+        var objKey = { "attr": "attr-val", "attr2": "attr2-val"};
+        try{
+          expect(testCache.replace(objKey, "value", "old", function(err){
+            done("Should have thrown a TypeError!");
+          })).to.throw(TypeError);
+        }catch(e){
+          done()
+        }
+      }      
+    });
+
+    it("Throw SyntaxErrors for missing parameters", function(done){
+      try{
+        expect(testCache.replace("value", "oldVal", function(err){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);
+      }catch(e){
+        try{
+          expect(testCache.replace(function(err){
+            done("Should have thrown a TypeError!");
+          })).to.throw(TypeError);
+        }catch(e){
+          done()
+        }
+      }      
+    });
+
+    it("Throw TypeErrors for invalid ttl values", function(done){
+      try{
+        expect(testCache.replace("MOCHAinvalidTTLKey", "value", "oldValue", "ttlString", function(err){
+          done("Should have thrown a TypeError!");
+        })).to.throw(TypeError);
+      }catch(e){
+        done();
+      }      
+    });
+  });
   
   describe("Test Deleting entries from the cache", function(){
     //Test deleting a value
@@ -365,7 +538,7 @@ describe("Mock Cache Services", function(){
 
   describe("Test Buffer behaviour", function(){
     //Test behaviour with binary streams
-    it("Do blobby blob stuff with the cache", function(done){
+    it("Do buffer stuffs with the cache", function(done){
       var blobbyBuffer = Buffer.alloc(512, true, 'binary');
       var longInt8View = new Uint8Array(blobbyBuffer);
       for (var i=0; i< longInt8View.length; i++) {
@@ -377,15 +550,14 @@ describe("Mock Cache Services", function(){
           done(err);
           return;
         }
-        testCache.get("MOCHABlobKey", 'blob', function(err, res){
+        testCache.get("MOCHABlobKey", 'buffer', function(err, res){
           if(err){
             done(err);
             return;
           }
-          var responseBuffer = Buffer.from(res, 'binary');
-          expect(responseBuffer).to.be.ok;
-          expect(responseBuffer).to.have.lengthOf(512);
-          var resBytes = new Uint8Array(responseBuffer);
+          expect(res).to.be.ok;
+          expect(res).to.have.lengthOf(512);
+          var resBytes = new Uint8Array(res);
           expect(resBytes).to.deep.equal(longInt8View);
           done();
         });      

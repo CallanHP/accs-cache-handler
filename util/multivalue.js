@@ -14,6 +14,9 @@
  */
 
 const MULTI_VALUE_COMPONENT_TYPE = "MultiValue expects an array of Strings or Buffers. Ensure data is serialized before being added to the MultiValue.";
+const MULTI_VALUE_DECODE_TYPE = "MultiValue expects a to decode a Buffer or a string.";
+const MALFORMED_DECODE = "Malformed value passed to decode, could not be parsed.";
+const ENCODING_TYPE = "encoding must be a string or falsey.";
 
 
 module.exports.encode = function(components, encoding){
@@ -29,7 +32,11 @@ module.exports.encode = function(components, encoding){
   if(!encoding){
     encoding = 'utf8';
   }
-  //TODO: Encoding lookup for bytes per char?
+  if(typeof encoding != 'string'){
+    throw new TypeError(ENCODING_TYPE);
+  }
+  //TODO: Encoding lookup for bytes per char for non utf8 strings
+  //At present, cannot handle non-utf8 strings. Sorry cachers of Asian languages.
   //Calculate total length of the Buffer
   var bufferLen = 4;
   for(var component in components){
@@ -60,9 +67,48 @@ module.exports.encode = function(components, encoding){
   return buf;
 }
 
-//Hmm... We don't know if the caller is expecting strings or buffers back...
-//Lets leave this unexported for now, until I know more about where it is required
-// module.exports.decode = function(components){
-
-// }
+//Given how the accs-cache-handler is written, Strings are the default, so we will return those unless 'isBlob' is set
+module.exports.decode = function(buf, encoding, isBlob){
+  if(typeof encoding == 'boolean'){
+    isBlob = encoding;
+    encoding = 'utf8';
+  }
+  if(!encoding){
+    encoding = 'utf8';
+  }
+  if(typeof encoding != 'string'){
+    throw new TypeError(ENCODING_TYPE);
+  }
+  if(!Buffer.isBuffer(buf) && typeof buf != 'string'){
+    throw new TypeError(MULTI_VALUE_DECODE_TYPE);
+  }
+  //Convert a string to a buffer
+  if(typeof buf == 'string'){
+    buf = Buffer.from(buf, encoding);
+  }
+  var bufOffset = 4;
+  var ret = []
+  //Read the number of entries
+  var numEntries = buf.readUInt32BE(0);
+  for(var i = 0; i<numEntries; i++){
+    try{
+      //read length of entry
+      var len = buf.readUInt32BE(bufOffset);
+      bufOffset += 4;
+      if(isBlob){
+        var newBuf = Buffer.allocUnsafe(len);
+        if(len != buf.copy(newBuf, 0, bufOffset)){
+          throw new Error("Assertion failed!");
+        }
+        ret.push(newBuf);
+      }else{
+        ret.push(buf.toString(encoding, bufOffset, bufOffset + len));
+      }
+      bufOffset += len;
+    }catch(err){
+      throw new Error(MALFORMED_DECODE);
+    }
+  }
+  return ret;
+}
 

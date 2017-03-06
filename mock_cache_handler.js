@@ -26,6 +26,9 @@ function MockCache(cacheName){
 }
 
 MockCache.prototype.get = function(key, objType, callback){
+  if(key == undefined || typeof key == 'function'){
+    throw new SyntaxError("key is a required parameter for get!");
+  }
 	if(typeof objType == 'function'){
 		callback = objType;
 		objType = null;
@@ -57,22 +60,25 @@ MockCache.prototype.get = function(key, objType, callback){
 };
 
 //Add an entry to the cache
-MockCache.prototype.put = function(key, val, ttl, isBlob, callback) {
+MockCache.prototype.put = function(key, val, ttl, isBuffer, callback) {
+  if(key == undefined || val == undefined || typeof key == 'function' || typeof val == 'function'){
+    throw new SyntaxError("key and val are required parameters for put!");
+  }
   if(typeof ttl == 'function'){
     callback = ttl;
     ttl = null;
-    isBlob = false;
+    isBuffer = false;
   }
   if(typeof ttl == 'boolean'){
-    if(typeof isBlob == 'function'){
-      callback = isBlob;
+    if(typeof isBuffer == 'function'){
+      callback = isBuffer;
     }
-    isBlob = ttl;
+    isBuffer = ttl;
     ttl = null;
   }
-  if(typeof isBlob == 'function'){
-    callback = isBlob;
-    isBlob = false;
+  if(typeof isBuffer == 'function'){
+    callback = isBuffer;
+    isBuffer = false;
   }
   if(typeof key == 'number'){
     key = String(key);
@@ -90,7 +96,12 @@ MockCache.prototype.put = function(key, val, ttl, isBlob, callback) {
     clearTimeout(this._cache[key].timeout);
   }
   this._cache[key] = {};
-  this._cache[key].value = val;
+  if(!isBuffer){
+    this._cache[key].value = val;  
+  }else{
+    this._cache[key].value = val.toString('utf8');
+  }
+  
   //Handle ttl
   if(ttl && ttl > 0){
     var self = this;
@@ -105,22 +116,25 @@ MockCache.prototype.put = function(key, val, ttl, isBlob, callback) {
 };
 
 //Add an entry to the cache if the key is available, otherwise reject.
-MockCache.prototype.putIfAbsent = function(key, val, ttl, isBlob, callback) {
+MockCache.prototype.putIfAbsent = function(key, val, ttl, isBuffer, callback) {
+  if(key == undefined || val == undefined || typeof key == 'function' || typeof val == 'function'){
+    throw new SyntaxError("key and val are required parameters for putIfAbsent!");
+  }
   if(typeof ttl == 'function'){
     callback = ttl;
     ttl = null;
-    isBlob = false;
+    isBuffer = false;
   }
   if(typeof ttl == 'boolean'){
-    if(typeof isBlob == 'function'){
-      callback = isBlob;
+    if(typeof isBuffer == 'function'){
+      callback = isBuffer;
     }
-    isBlob = ttl;
+    isBuffer = ttl;
     ttl = null;
   }
-  if(typeof isBlob == 'function'){
-    callback = isBlob;
-    isBlob = false;
+  if(typeof isBuffer == 'function'){
+    callback = isBuffer;
+    isBuffer = false;
   }
   if(typeof key == 'number'){
     key = String(key);
@@ -136,8 +150,56 @@ MockCache.prototype.putIfAbsent = function(key, val, ttl, isBlob, callback) {
     return;
   }
   this._cache[key] = {};
-  this._cache[key].value = val;
+  if(!isBuffer){
+    this._cache[key].value = val;  
+  }else{
+    this._cache[key].value = val.toString('utf8');
+  }
   this._count++;
+  //Handle ttl
+  if(ttl && ttl > 0){
+    this._cache[key].timeout = setTimeout(function(){
+        if(self._cache[key]){
+          self._cache[key] = null; 
+          self._count--;
+        }
+      }, ttl);
+  }
+  callback(null);
+};
+
+//Add an entry to the cache if the current value equals an old value.
+MockCache.prototype.replace = function(key, val, oldVal, ttl, callback) {
+  if(key == undefined || val == undefined || oldVal == undefined
+    || typeof key == 'function' || typeof val == 'function' || typeof oldVal == 'function'){
+    throw new SyntaxError("key, val and oldVal are required parameters for replace!");
+  }
+  if(typeof ttl == 'function'){
+    callback = ttl;
+    ttl = null;
+  }
+  if(typeof key == 'number'){
+    key = String(key);
+  }
+  if(typeof key != 'string'){
+    throw new TypeError("Caching keys must be strings or numbers!");
+  }
+  if(ttl && typeof ttl != 'number'){
+    throw new TypeError("Time to live for cache entries must a positive number!");
+  }
+  if(!this._cache[key] || this._cache[key].value != oldVal){
+    callback(new Error('Did not insert entry, cached value does not equal oldVal supplied.'));
+    return;
+  }
+  if(this._cache[key].timeout){
+    clearTimeout(this._cache[key].timeout);
+  }
+  this._cache[key] = {};
+  if(!isBuffer){
+    this._cache[key].value = val;  
+  }else{
+    this._cache[key].value = val.toString('utf8');
+  }
   //Handle ttl
   if(ttl && ttl > 0){
     this._cache[key].timeout = setTimeout(function(){
@@ -152,6 +214,9 @@ MockCache.prototype.putIfAbsent = function(key, val, ttl, isBlob, callback) {
 
 //Delete an entry from the cache
 MockCache.prototype.delete = function(key, callback) {
+  if(key == undefined || typeof key == 'function'){
+    throw new SyntaxError("key is a required parameter for delete!");
+  }
   if(typeof key == 'number'){
     key = String(key);
   }
@@ -200,9 +265,10 @@ MockCache.prototype.stats = function(callback){
 function _coerceObjectType(obj, objHint){
     switch(objHint){
       case 'string':
-      case 'blob':
         //Response that comes back is application/octet-stream, which we will return raw
         return obj;
+      case 'buffer':
+        return Buffer.from(obj, 'utf8');
       case 'number':
         var num = Number(obj);
         if(isNaN(num)){
