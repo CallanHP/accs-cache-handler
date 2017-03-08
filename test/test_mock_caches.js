@@ -77,10 +77,12 @@ describe("Mock Cache Services", function(){
           ["Internal Caching URL is not set. Falling back on using a local hashmap instead.\n",
           "If this application is running on ACCS, ensure that you have correctly bound to a caching service.\n"]);
     });
+
     //Test explicit MockCache class creation from Cache works
     it("Create a MockCache explicitly from the Cache export", function(){
-      var Cache = require("../cache_handler.js").MockCache;
-      var newCache = new Cache("Test-Mock-Cache-Explicit");
+      var Cache = require("../cache_handler.js");
+      var TestMockCache = Cache.MockCache;
+      var newCache = new TestMockCache("Test-Mock-Cache-Explicit");
       expect(newCache).to.have.property('_cache');
     });
   });

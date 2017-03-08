@@ -71,8 +71,8 @@ For more information on the CACHING_INTERNAL_CACHE_URL environment variable, che
 If for some reason you need to create a mock cache explicitly, you can do so via the .MockCache export.
 ```js
 var Cache = require('accs-cache-handler');
-
-var mockCache = Cache.MockCache('Explicit-Mock-Cache');
+var MockCache = Cache.MockCache;
+var explicitMockCache = new MockCache('Explicit-Mock-Cache');
 ```
 
 There is a minor difference between the interfaces in that the size attribute returned from Cache.stats is not calculated accurately, it instead simply returns the number of entries time four. Calculating a semi-accurate memory footprint in Javascript for a flexibly sized object is pretty compute intense, and seems unneeded for most scenarios. The online value is still accurate, as it comes from the ACCS Cache instance itself.
