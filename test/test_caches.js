@@ -1,6 +1,9 @@
 var expect = require('chai').expect;
 var nock = require('nock');
 
+var stdout = require("test-console").stdout;
+var stderr = require("test-console").stderr;
+
 //Set up offline testing if required
 var shouldMock = true;
 var mockServices;
@@ -183,6 +186,7 @@ describe("ACCS Cache Services Base Functionality - 17.1.1 Release", function(){
     //Test Cache put with time to live
     it("Insert a value with TTL", function(done){
       this.timeout(5000);
+      this.slow(3000);
       testCache.put("MOCHAtemporaryKey", "value", 500, function(err){
         if(err){
           done(err);
@@ -570,6 +574,8 @@ describe("ACCS Cache Services Functionality - 17.1.5 Release", function(){
       }      
     });
   });
+
+  
   /*
   //Uncomment to create nock objects!
   after(function(){
@@ -580,3 +586,94 @@ describe("ACCS Cache Services Functionality - 17.1.5 Release", function(){
     console.log("Wrote mocks.json!");
   });*/
 });
+
+/*
+ * Heavy mocking of downstream errors in order to mimic failure behaviours to test retries.
+ */
+describe("ACCS Caching Retry Behaviour", function(){
+    var retryCache = new Cache("retry_cache"); 
+
+
+    afterEach(function(){
+      //Clean up nock, since there is no other way to remove a persist
+      nock.cleanAll();
+    });
+
+    it("Retries when Host is not found", function(done){
+      this.slow(300);
+      var hostNotFoundError = {"code":"ENOTFOUND",
+                               "errno":"ENOTFOUND",
+                               "syscall":"getaddrinfo",
+                               "hostname":"mock_offline_testing_hostname",
+                               "host":"mock_offline_testing_hostname",
+                               "port":8080};
+      nock("http://mock_offline_testing_hostname:8080").log(console.log)
+      .get("/ccs/retry_cache/testKey").replyWithError(hostNotFoundError);
+      nock("http://mock_offline_testing_hostname:8080").log(console.log)
+      .get("/ccs/retry_cache/testKey").reply(200, "SomeValue");
+      var inspect = stdout.inspect();
+      retryCache.get("testKey", function(err, result){
+        if(err){
+          done(err);
+          return;
+        }
+        inspect.restore();
+        //Check the nock logs. Should see two matching logs
+        //'matching http://mock_offline_testing_hostname:8080 to GET http://mock_offline_testing_hostname:8080/ccs/retry_cache/testKey: true'
+        expect(inspect.output).to.have.lengthOf(2);
+        expect(result).to.equal("SomeValue");
+        done();
+      });   
+    });
+
+    //SLOOOOOOOW! Maybe mark cache as dead? Seems that would break way more things.
+    it("Returns an error after failing to connect n times", function(done){
+      this.timeout(10000);
+      this.slow(8000);
+      var hostNotFoundError = {"code":"ENOTFOUND",
+                               "errno":"ENOTFOUND",
+                               "syscall":"getaddrinfo",
+                               "hostname":"mock_offline_testing_hostname",
+                               "host":"mock_offline_testing_hostname",
+                               "port":8080};
+      nock("http://mock_offline_testing_hostname:8080").persist().log(console.log)
+      .get("/ccs/retry_cache/testNoHostKey").replyWithError(hostNotFoundError);
+      var inspect = stderr.inspect();
+      var inspectLog = stdout.inspect();
+      retryCache.get("testNoHostKey", function(err, result){
+        expect(err).to.exist;
+        inspect.restore();
+        inspectLog.restore();
+        expect(inspect.output).to.have.members(["MAX_RETRIES met for request backoff! Caching service might be down!\n"]);
+        //We should see 6 matching requests (original + 5 retries)
+        expect(inspectLog.output).to.have.lengthOf(6);
+        done();
+      });
+    });
+
+    it("Retries on a connection error", function(done){
+      this.slow(300);
+      var connectionError = {"code":"ETIMEDOUT",
+                             "errno":"ETIMEDOUT",
+                             "syscall":"connect",
+                             "address":"127.0.0.1",
+                             "port":8080};
+      nock("http://mock_offline_testing_hostname:8080").log(console.log)
+      .get("/ccs/retry_cache/testConnFailureKey").replyWithError(connectionError);
+      nock("http://mock_offline_testing_hostname:8080").log(console.log)
+      .get("/ccs/retry_cache/testConnFailureKey").reply(200, "SomeValue");
+      var inspect = stdout.inspect();
+      retryCache.get("testConnFailureKey", function(err, result){
+        if(err){
+          done(err);
+          return;
+        }
+        inspect.restore();
+        //Check the nock logs. Should see two matching messages
+        expect(inspect.output).to.have.lengthOf(2);
+        expect(result).to.equal("SomeValue");
+        done();
+      });
+    });
+
+  });

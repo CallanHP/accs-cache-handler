@@ -111,7 +111,7 @@ describe("MultiValue Object", function(){
       var stringArr = new Array("stringOne", "stringTwo");
       try{
         expect(mv.decode(stringArr, complexObject)).to.throw(TypeError);  
-      }catch(err){}      
+      }catch(err){}
     });
   });
 });

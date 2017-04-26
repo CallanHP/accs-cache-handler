@@ -7,7 +7,9 @@
  * Internally the cache uses byte arrays (octet streams), so focus is upon coercing
  * the cached objects into appropriate formats.
  */
-var request = require('request');
+var request = require('./util/request-with-backoff.js');
+//var request = require('request');
+
 var MockCache = require('./mock_cache_handler.js');
 var multivalue = require("./util/multivalue");
 
