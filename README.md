@@ -182,3 +182,5 @@ Patch versions are used for bug and documentation-fixes.
 **1.1.x:** Added offline-testing mode for testing code not deployed to ACCS.
 
 **1.2.x:** Added 17.1.5 functionality, improved handling of Buffers.
+
+**1.3.x:** Added connection-retry and backoff, to accomodate connectivity hiccups during cache scaling, as described [here](http://docs.oracle.com/en/cloud/paas/app-container-cloud/cache/handling-connection-exceptions-retries.html).
