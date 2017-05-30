@@ -14,6 +14,7 @@ Library to provide standard, simple caching interfaces (get, put, delete) around
  	* [Cache.put()](#cacheput)
  	* [Cache.putIfAbsent()](#cacheputifabsent)
  	* [Cache.get()](#cacheget)
+ 	* [Cache.delete()](#cachedelete)
  	* [Cache.replace()](#cachereplace)
  	* [Cache.clear()](#cacheclear)
   	* [Cache.stats()](#cachestats)
@@ -124,6 +125,17 @@ get retrieves an entry from the cache, or returns null if there is no entry asso
 **objType:** (optional) a type hint for how the response should be returned in the callback. See 'About Object Types' below for more detail.
 
 **callback:** the callback function for get() takes the form of callback(err, response), where response is the object which was retrieved from the cache. 'typeof response' varies, see 'About Object Types'
+
+### Cache.delete
+```
+get(key, callback)
+```
+delete removes an entry from the cache. This is idempotent, and no error is thrown if the cache key is not present, making it safe to call on values with ttl, or from multiple instances.
+
+**key:** the key used to insert the value originally
+
+**callback:** the callback function for delete() takes the form of callback(err). 
+
 
 ### Cache.replace
 ```

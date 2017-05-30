@@ -1,6 +1,6 @@
 {
   "name": "accs-cache-handler",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Library to provide standard, simple caching interfaces (get, put, delete) around the Caching platform services in Oracle’s Application Container Cloud service.",
   "main": "cache_handler.js",
   "scripts": {
